@@ -1,3 +1,4 @@
+//Array of objects
 const questions = [
     {
         question: "Question 1",
@@ -51,17 +52,21 @@ const nextButton = document.getElementById("next-btn");
 
 let currentQuestionIndex = 0;
 let score = 0;
+let quizQuestions = [];
 
 function startQuiz(){
     currentQuestionIndex = 0;
     score = 0;
+    quizQuestions = [...questions];
+    //seed for sorting
+    quizQuestions.sort(()=> Math.random()-0.5);
     nextButton.innerHTML = "Next";
     showQuestion();
 }
 
 function showQuestion(){
     resetState();
-    let currentQuestion = questions[currentQuestionIndex];
+    let currentQuestion = quizQuestions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
     questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
 

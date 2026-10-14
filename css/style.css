@@ -67,6 +67,54 @@ nav div a:hover{
     text-align: center;
 }
 
+.setup{
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    margin: 100px auto 0;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.setup h1{
+    font-size: 25px;
+    color: #001e4d;
+    font-weight: 600;
+    text-align: center;
+}
+
+.setupb{
+    display: flex;
+    justify-content: center;
+}
+
+.setupb button{
+    background: #001e4d;
+    color: #fff;
+    font-weight: 500;
+    width: 150px;
+    border: 0;
+    padding: 10px;
+    margin: 20px auto 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.options{
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+}
+.menu a {
+    font-size: 15px;
+    color:#fff;
+    font-weight: 600;
+    padding: 10px 5px;
+    text-align: center;
+    background-color: #001e4d;
+    text-decoration: none;
+}
+
 .app{
     background: #fff;
     width: 90%;
@@ -135,4 +183,10 @@ nav div a:hover{
 
 .incorrect{
     background: #ff9393;
+}
+
+.result p{
+    font-size: 16px;
+    color: #001e4d;
+    font-weight: 600;
 }

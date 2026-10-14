@@ -121,7 +121,7 @@ const questions = [
         answers: [
             { text: "Facilitar el acceso a los mandos y disponer de buena visibilidad", correct: true},
             { text: "Ser lo más alto posible para ver mejor hacia delante", correct: false},
-            { text: "Estar lo más adelante posible para po- der acelerar mejor", correct: false},
+            { text: "Estar lo más adelante posible para poder acelerar mejor", correct: false},
         ]
     },
 
@@ -216,7 +216,7 @@ const questions = [
     },
 
     {
-        question: "Es válido portar una copia simple de la licencia o matrícula para circular en el Ecuador:?",
+        question: "Es válido portar una copia simple de la licencia o matrícula para circular en el Ecuador?",
         answers: [
             { text: "No, nunca", correct: true},
             { text: "Solo si está impresa", correct: false},
@@ -255,7 +255,7 @@ const questions = [
         question: "Si conduce su vehículo con un nivel de alcohol por litro de sangre de 0,3 a 0,80; ¿Qué sanción será aplicada?",
         answers: [
             { text: "Treinta días de privación de libertad y retención del vehículo por veinticuatro horas", correct: false},
-            { text: "Cinco días de privación de libertady retención del vehículo por veinticuatro horas", correct: true},
+            { text: "Cinco días de privación de libertad y retención del vehículo por veinticuatro horas", correct: true},
             { text: "Ninguna de las anteriores", correct: false},
         ]
     },
@@ -576,15 +576,6 @@ const questions = [
     },
 
     {
-        question: "¿Cuál es la distancia mínima de seguimiento que debe mantener entre vehículo y ciclista al conducir?",
-        answers: [
-            { text: "1 metro", correct: false},
-            { text: "3 metros", correct: true},
-            { text: "2 metros", correct: false},
-        ]
-    },
-
-    {
         question: "En las carreteras, ¿Los conductores cuando circulan deben dar preferencia?",
         answers: [
             { text: "Otros conductores", correct: false},
@@ -608,15 +599,6 @@ const questions = [
             { text: "El conductor que está saliendo", correct: false},
             { text: "Otros vehículos", correct: false},
             { text: "Peatones, ciclistas y vehículos", correct: true},
-        ]
-    },
-    
-    {
-        question: "¿A qué velocidad se estima que un atropellamiento de un niño/a sería mortal?",
-        answers: [
-            { text: "10km/h", correct: false},
-            { text: "15km/h", correct: false},
-            { text: "25km/h", correct: true},
         ]
     },
 
@@ -684,26 +666,42 @@ const questions = [
     },
 ];
 
+const setup = document.getElementById("setup");
+const app = document.getElementById("app");
+const quiz = document.getElementById("quiz");
+const allquestionsb = document.getElementById("all-btn");
+const pruebab = document.getElementById("fixed-btn");
+const resultElement = document.getElementById("result");
+const infoElement = document.getElementById("info");
+const statusElement = document.getElementById("estado");
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
+const n=20;
 
 let currentQuestionIndex = 0;
 let score = 0;
+let quizQuestions = [];
 
-function startQuiz(){
+function startQuiz(number = questions.length){
     currentQuestionIndex = 0;
     score = 0;
+    quizQuestions = [...questions];
+    quizQuestions.sort(()=> Math.random()-0.5);
+    quizQuestions = quizQuestions.slice(0, number);
+    setup.style.display = "none";
+    app.style.display = "block";
+    quiz.style.display = "block";
     nextButton.innerHTML = "Next";
     showQuestion();
 }
 
 function showQuestion(){
     resetState();
-    let currentQuestion = questions[currentQuestionIndex];
+    let currentQuestion = quizQuestions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
     questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
-
+    
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement("button");
         button.innerHTML = answer.text;
@@ -718,6 +716,7 @@ function showQuestion(){
 
 function resetState(){
     nextButton.style.display = "none";
+    resultElement.style.display = "none";
     while(answerButtons.firstChild){
         answerButtons.removeChild(answerButtons.firstChild);
     }
@@ -743,14 +742,23 @@ function selectAnswer(e){
 
 function showScore(){
     resetState();
-    questionElement.innerHTML = `Obtuviste ${score} de ${questions.length}`;
+    questionElement.innerHTML = `Obtuviste ${score} de ${quizQuestions.length}`;
+    if(quizQuestions.length == 20){
+        resultElement.style.display = "block";
+        infoElement.innerHTML = `El minimo para aprobar es 16`;
+        if(score>=16){
+            statusElement.innerHTML = `Estado: Aprobado`;
+        }else{
+            statusElement.innerHTML = `Estado: Reprobado`
+        }
+    }
     nextButton.innerHTML = "Empezar de nuevo";
     nextButton.style.display = "block";
 }
 
 function handleNextButton(){
     currentQuestionIndex++;
-    if(currentQuestionIndex < questions.length){
+    if(currentQuestionIndex < quizQuestions.length){
         showQuestion();
     }else{
         showScore();
@@ -758,11 +766,23 @@ function handleNextButton(){
 }
 
 nextButton.addEventListener("click", ()=>{
-    if(currentQuestionIndex < questions.length){
-        handleNextButton();
+    if(nextButton.innerHTML === "Empezar de nuevo"){
+        setup.style.display = "block";
+        app.style.display = "none";
+        quiz.style.display = "none";
     }else{
-        startQuiz();
+        handleNextButton();
     }
 });
 
-startQuiz();
+allquestionsb.addEventListener("click",()=>{
+    startQuiz(questions.length);
+});
+
+pruebab.addEventListener("click", ()=>{
+    const amount = Math.min(
+        n,
+        questions.length
+    );
+    startQuiz(amount)
+});
